@@ -5,10 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Artisans228 - Artisans de Confiance au Togo</title>
     <!-- Favicon Browser Tab Icon -->
-    <link rel="icon" type="image/png" href="https://api.qrserver.com/v1/create-qr-code/?size=64x64&data=A228&color=006633&bgcolor=FFFFFF">
+    <link rel="icon" type="image/png" href="logo.png">
+    
+    <!-- PWA Manifest Link -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0b3b20">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Artisans228">
     
     <meta name="description" content="Trouvez rapidement des artisans qualifiés (plombiers, électriciens, peintres...) partout au Togo. Contactez-les directement par WhatsApp en un clic. C'est 100% gratuit !">
-    <meta name="google-site-verification" content="4qligXJmJr5AsTn2dD1CdYK5xLkToaDXhrprZvcd05k" />
+    <link rel="canonical" href="https://www.artisans228.com/">
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -22,158 +29,443 @@
             max-width: 600px;
             margin: 0 auto;
             padding: 15px;
+            padding-top: 75px; /* Space for fixed header */
             transition: max-width 0.3s ease;
         }
-        /* Full-Screen Splash Intro Screen */
-        #splash-screen {
+
+        /* Fixed Top Header - Centré et aligné avec le conteneur principal */
+        .fixed-header {
             position: fixed;
             top: 0;
-            left: 0;
+            left: 50%;
+            transform: translateX(-50%);
             width: 100%;
-            height: 100%;
-            background-color: #006633;
-            color: white;
+            max-width: 600px;
+            background-color: #ffffff;
+            border-bottom: 1px solid #eaeaea;
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            box-sizing: border-box;
+            z-index: 999;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        }
+        .header-brand {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        .header-title-wrapper h2 {
+            font-size: 24px; /* Grande taille pour occuper l'espace à gauche */
+            color: #006633;
+            margin: 0;
+            font-weight: 900;
+            letter-spacing: -0.8px;
+            line-height: 1.1;
+        }
+        .header-title-wrapper p {
+            font-size: 11px;
+            color: #666;
+            margin: 0;
+        }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .flag-badge {
+            font-size: 20px;
+            background: #f1f3f5;
+            padding: 4px 8px;
+            border-radius: 20px;
+        }
+        .menu-btn {
+            background-color: #0b3b20;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Owner Contact / Menu Modal */
+        .owner-contact-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
             justify-content: center;
             align-items: center;
-            z-index: 9999;
-            text-align: center;
-            padding: 25px;
+            z-index: 10000;
+            padding: 20px;
             box-sizing: border-box;
-            transition: opacity 0.6s ease;
         }
-        /* Green Intro Hero Banner */
-        .hero-banner {
-            background-color: #006633;
-            color: white;
-            padding: 30px 20px;
+        .owner-contact-content {
+            background: #fff;
+            padding: 25px;
             border-radius: 12px;
+            max-width: 380px;
+            width: 100%;
             text-align: center;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 12px rgba(0,102,51,0.15);
+            position: relative;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
         }
-        .hero-banner h1 {
+
+        /* FAQ Modal Specific Styles */
+        .faq-modal-content {
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            text-align: left;
+            position: relative;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+            box-sizing: border-box;
+        }
+        .faq-item {
+            margin-bottom: 16px;
+            border-bottom: 1px solid #eaeaea;
+            padding-bottom: 12px;
+        }
+        .faq-question {
+            font-size: 14px;
+            font-weight: bold;
+            color: #006633;
+            margin-bottom: 4px;
+        }
+        .faq-answer {
+            font-size: 13px;
+            color: #444;
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        /* Top Intro Header Text & Action Buttons */
+        .intro-top-section {
+            background-color: transparent;
+            padding: 5px 0 10px 0;
+            text-align: left;
+        }
+        .intro-top-section h1 {
             font-size: 26px;
+            line-height: 1.2;
             margin: 0 0 8px 0;
+            color: #111;
+            font-weight: 800;
+        }
+        .intro-top-section p {
+            font-size: 13px;
+            margin: 0 0 12px 0;
+            color: #555;
+            line-height: 1.4;
+        }
+
+        /* Action Buttons Container & Sticky Yellow */
+        .action-buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        
+        /* Bouton Jaune Sticky */
+        .sticky-yellow-btn {
+            position: sticky;
+            top: 56px;
+            z-index: 98;
+            background-color: #ffcc00;
+            color: #111;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 18px;
+            border-radius: 14px;
+            text-decoration: none;
+            box-sizing: border-box;
+            box-shadow: 0 4px 12px rgba(255, 204, 0, 0.3);
+            transition: transform 0.2s;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .sticky-yellow-btn:hover {
+            transform: scale(1.01);
+        }
+        .sticky-yellow-btn .btn-arrow-circle {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        /* Bouton Vert plus compact */
+        .action-main-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-radius: 14px;
+            text-decoration: none;
+            box-sizing: border-box;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transition: transform 0.2s;
+            width: 100%;
+        }
+        .action-main-btn:hover {
+            transform: scale(1.01);
+        }
+        .btn-client-white {
+            background-color: #0b3b20;
+            color: white;
+            padding: 10px 16px;
+        }
+        .btn-left-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .btn-search-icon-circle {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
             color: white;
         }
-        .hero-banner p {
-            font-size: 14px;
-            margin: 0 0 15px 0;
-            opacity: 0.95;
+        .btn-text-group {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
         }
-        /* Glowing/Pulsing Top Signup Button */
-        @keyframes pulseGlow {
-            0% {
-                box-shadow: 0 0 0 0 rgba(255, 221, 87, 0.7);
-            }
-            70% {
-                box-shadow: 0 0 0 12px rgba(255, 221, 87, 0);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(255, 221, 87, 0);
-            }
-        }
-        .top-signup-btn {
-            display: block;
-            background-color: #ffdd57;
-            color: #111;
-            text-align: center;
-            padding: 14px;
-            border-radius: 8px;
+        .btn-main-title {
+            font-size: 15px;
             font-weight: bold;
+        }
+        .btn-sub-title {
+            font-size: 12px;
+            opacity: 0.85;
+        }
+        .btn-desc-text {
+            font-size: 11px;
+            opacity: 0.9;
+            line-height: 1.3;
+            margin-top: 1px;
+        }
+        .btn-arrow-circle {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 14px;
-            text-decoration: none;
-            margin-bottom: 20px;
-            animation: pulseGlow 2s infinite;
-            transition: background-color 0.2s;
+            font-weight: bold;
+            flex-shrink: 0;
         }
-        .top-signup-btn:hover {
-            background-color: #ffcc00;
+
+        /* Live Counter Pill Badge */
+        .community-pill {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+            border: 1px solid #eaeaea;
+            padding: 12px 15px;
+            border-radius: 30px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+            margin-bottom: 25px;
+            text-align: center;
         }
+        .community-text {
+            font-size: 13px;
+            color: #333;
+            font-weight: 500;
+        }
+        .community-text strong {
+            color: #0b3b20;
+        }
+
         .red-line {
             height: 3px;
             background-color: #dc3545;
             border: none;
-            margin: 0 0 20px 0;
+            margin: 10px 0 20px 0;
             border-radius: 2px;
         }
         .section-title {
             font-size: 15px;
             font-weight: bold;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             color: #006633;
             text-align: center;
+        }
+        .form-reassurance {
+            font-size: 12px;
+            color: #006633;
+            text-align: center;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        
+        .benefits-box {
+            background: #f1f8f4;
+            border: 1px solid #c8e6c9;
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin-bottom: 15px;
+        }
+        .benefits-title {
+            font-size: 13px;
+            font-weight: bold;
+            color: #006633;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            text-align: center;
+            justify-content: center;
+        }
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 10px;
+        }
+        .benefit-item {
+            font-size: 11px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            line-height: 1.3;
+        }
+
+        .field-helper {
+            font-size: 11px;
+            color: #666;
+            margin-top: 4px;
+            display: block;
+            font-style: italic;
+        }
+        .feed-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
         }
         .feed-title {
             font-size: 17px;
             font-weight: bold;
-            margin-bottom: 12px;
             color: #222;
+            margin: 0;
         }
-        /* Categories Filter Bar */
+        .view-all-link {
+            font-size: 13px;
+            color: #006633;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Rounded Square Categories Scroll Bar */
         .categories-scroll {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             overflow-x: auto;
             padding-bottom: 10px;
             margin-bottom: 15px;
             scrollbar-width: none;
+            padding-left: 2px;
         }
         .categories-scroll::-webkit-scrollbar {
             display: none;
         }
-        .cat-btn {
-            background: #fff;
-            border: 1px solid #ccc;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
+        .cat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             cursor: pointer;
-            white-space: nowrap;
-            color: #333;
-            transition: all 0.2s;
+            flex-shrink: 0;
+            width: 72px;
         }
-        .cat-btn.active, .cat-btn:hover {
-            background-color: #006633;
+        .cat-box {
+            width: 64px;
+            height: 64px;
+            background: #f1f3f5;
+            border: 1px solid #e9ecef;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            transition: all 0.2s ease;
+        }
+        .cat-item.active .cat-box {
+            background-color: #0b3b20;
+            border-color: #0b3b20;
             color: white;
-            border-color: #006633;
+            box-shadow: 0 4px 10px rgba(11, 59, 32, 0.25);
         }
-        /* Neighborhood & General Search Bar */
+        .cat-item:hover .cat-box {
+            transform: scale(1.03);
+        }
+        .cat-label {
+            font-size: 11px;
+            color: #333;
+            margin-top: 6px;
+            text-align: center;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+        }
+
+        /* Universal Search Bar */
         .search-container {
-            margin-bottom: 15px;
             position: relative;
+            margin-bottom: 15px;
         }
         .search-input {
             width: 100%;
             padding: 12px;
-            padding-left: 35px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
+            padding-left: 38px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
             font-size: 14px;
             box-sizing: border-box;
+            background: #fff;
         }
         .search-icon {
             position: absolute;
-            left: 10px;
+            left: 12px;
             top: 50%;
             transform: translateY(-50%);
             color: #888;
-            font-size: 16px;
+            font-size: 15px;
         }
+
         /* Artisans Feed Area */
         .artisans-scroll-area {
             display: flex;
             flex-direction: column;
             gap: 12px;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
         }
         .artisan-card {
             background: #fff;
             padding: 16px;
-            border-radius: 8px;
+            border-radius: 12px;
             border: 1px solid #eaeaea;
             box-shadow: 0 1px 3px rgba(0,0,0,0.02);
             cursor: pointer;
@@ -196,14 +488,16 @@
             text-overflow: ellipsis;
         }
 
-        /* Desktop Media Query */
         @media (min-width: 768px) {
             .container {
-                max-width: 850px;
+                max-width: 1050px;
+            }
+            .fixed-header {
+                max-width: 1050px;
             }
             .artisans-scroll-area {
                 display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+                grid-template-columns: repeat(3, 1fr);
                 gap: 16px;
             }
         }
@@ -281,6 +575,7 @@
             border: 2px solid #006633;
             box-shadow: 0 2px 8px rgba(0,102,51,0.08);
             margin-bottom: 20px;
+            scroll-margin-top: 80px; 
         }
         .form-group {
             margin-bottom: 14px;
@@ -357,120 +652,250 @@
             opacity: 0;
             transition: opacity 0.5s ease;
         }
-        .success-share-btn {
-            display: inline-block;
+        .success-buttons-box {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 18px;
+            width: 100%;
+            max-width: 360px;
+        }
+        .success-action-btn {
+            display: block;
             background-color: #25D366;
             color: white;
-            padding: 14px 24px;
+            padding: 12px 18px;
             border-radius: 30px;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 14px;
             text-decoration: none;
-            margin-top: 20px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            transition: transform 0.2s;
+            transition: transform 0.2s, background-color 0.2s;
         }
-        .success-share-btn:hover {
-            transform: scale(1.05);
+        .success-action-btn:hover {
+            transform: scale(1.03);
+        }
+        .success-action-btn.secondary {
+            background-color: #ffdd57;
+            color: #111;
+        }
+        .success-action-btn.nav-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .success-action-btn.nav-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
         }
 
         footer {
             text-align: center;
-            padding: 20px 0;
+            padding: 15px 0 5px 0;
             font-size: 13px;
             color: #666;
             border-top: 1px solid #eaeaea;
             margin-top: 20px;
+        }
+        .footer-tagline {
+            font-size: 11px;
+            color: #666;
+            margin: 0 0 10px 0;
+            line-height: 1.4;
+            padding: 0 10px;
         }
         footer a {
             color: #006633;
             text-decoration: none;
             font-weight: bold;
         }
-        .footer-whatsapp-btn {
-            display: inline-block;
-            background-color: #25D366;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: bold;
-            text-decoration: none;
-            margin-top: 10px;
-            font-size: 14px;
-            transition: opacity 0.2s;
-        }
-        .footer-whatsapp-btn:hover {
-            opacity: 0.9;
-        }
     </style>
 </head>
 <body>
-    <!-- Automatic 3-Second Splash Screen -->
-    <div id="splash-screen">
-        <div style="max-width: 420px;">
-            <h1 style="font-size: 26px; margin-top: 0; color: white; margin-bottom: 15px;">🇹🇬 Artisans228</h1>
-            <p style="font-size: 15px; line-height: 1.6; opacity: 0.95; margin-bottom: 15px;">
-                Trouvez rapidement des artisans qualifiés (plombiers, électriciens, peintres...) partout au Togo. Parcourez les profils et contactez-les directement par WhatsApp ou appel en un clic !
-            </p>
-            <p style="font-size: 16px; font-weight: bold; color: #ffdd57; margin-bottom: 20px;">
-                C'est gratuit !
-            </p>
-            <p style="font-size: 13px; opacity: 0.9;">
-                Pour toute question : <a href="mailto:artisans228@gmail.com" style="color: white; text-decoration: underline;">artisans228@gmail.com</a>
-            </p>
+    <!-- Fixed Top Header -->
+    <div class="fixed-header">
+        <a href="#" class="header-brand">
+            <div class="header-title-wrapper">
+                <h2>Artisans228</h2>
+                <p>Ensemble, soutenons le savoir-faire togolais !</p>
+            </div>
+        </a>
+        <div class="header-actions">
+            <span class="flag-badge">🇹🇬</span>
+            <button class="menu-btn" onclick="openOwnerContact()" aria-label="Menu Contact">☰</button>
         </div>
     </div>
 
-    <!-- Full-Screen Green Success Screen (Shows on Form Submit) -->
+    <!-- Owner Contact & Menu Modal -->
+    <div id="owner-contact-modal" class="owner-contact-modal" onclick="closeOwnerContact(event)">
+        <div class="owner-contact-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeOwnerContact()">×</button>
+            <h3 style="margin-top: 0; color: #006633; font-size: 20px;">Menu & Assistance</h3>
+            <p style="font-size: 14px; color: #555; margin-bottom: 20px;">
+                Besoin d'aide, de consulter la FAQ ou de contacter le propriétaire ? Choisissez une option ci-dessous :
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <button onclick="openFaqModal()" class="modal-action-btn" style="background-color: #ffcc00; color: #111;">
+                    ❓ Foire Aux Questions (FAQ)
+                </button>
+                <a href="https://wa.me/15013131590?text=Bonjour,%20je%20vous%20contacte%20depuis%20le%20site%20Artisans228." target="_blank" class="modal-action-btn btn-whatsapp">
+                    💬 Écrire sur WhatsApp
+                </a>
+                <a href="mailto:artisans228@gmail.com?subject=Contact%20depuis%20Artisans228" class="modal-action-btn" style="background-color: #006633; color: white;">
+                    ✉️ Envoyer un Email
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Modal Popup -->
+    <div id="faq-modal" class="modal-overlay" onclick="closeFaqModal(event)">
+        <div class="faq-modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeFaqModal()">×</button>
+            <h2 style="margin-top: 0; color: #006633; font-size: 18px; text-align: center; margin-bottom: 15px;">❓ Foire Aux Questions (FAQ)</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">1. Qu'est-ce qu'Artisans228 ?</div>
+                <div class="faq-answer">Artisans228 est une vitrine numérique et une plateforme de mise en relation conçue pour connecter les clients aux meilleurs artisans et professionnels de confiance partout au Togo (plombiers, électriciens, maçons, mécaniciens, etc.).</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">2. Est-ce vraiment 100 % gratuit ?</div>
+                <div class="faq-answer">Oui, totalement ! L'inscription pour les artisans est entièrement gratuite, et l'accès à la recherche de professionnels est libre et sans frais pour les clients.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">3. Comment trouver un artisan pour un travail ?</div>
+                <div class="faq-answer">Utilisez la barre de recherche ou les catégories, puis cliquez sur le profil d'un artisan pour découvrir ses compétences et le contacter directement par WhatsApp ou téléphone en un clic.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">4. Comment faire pour inscrire mon activité d'artisan ?</div>
+                <div class="faq-answer">Rendez-vous sur le formulaire d'inscription sur la page d'accueil, remplissez vos informations (Nom, Spécialité, Région, Quartier, bio et WhatsApp) et validez. Votre profil est visible immédiatement.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">5. Comment les clients me contactent-ils ?</div>
+                <div class="faq-answer">Les clients voient votre profil directement sur le site et utilisent votre numéro WhatsApp ou votre numéro de téléphone pour vous joindre et discuter de leurs projets.</div>
+            </div>
+
+            <div class="faq-item" style="border-bottom: none; margin-bottom: 0; padding-bottom: 0;">
+                <div class="faq-question">6. Comment contacter l'équipe en cas besoin ?</div>
+                <div class="faq-answer">Vous pouvez contacter directement le propriétaire à tout moment en cliquant sur le menu (☰) en haut de la page, puis sur l'option de contact WhatsApp ou e-mail.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Full-Screen Green Success Screen -->
     <div id="success-overlay">
-        <div style="max-width: 450px;">
-            <h2 style="font-size: 24px; color: #ffdd57; margin-top: 0; margin-bottom: 15px;">🎉 Inscription réussie !</h2>
-            <p style="font-size: 16px; line-height: 1.6; margin-bottom: 15px;">
-                Votre profil a été soumis et sera désormais visible sur le site.
+        <div style="max-width: 450px; padding: 0 15px;">
+            <h2 style="font-size: 24px; color: #ffdd57; margin-top: 0; margin-bottom: 12px;">✅ Inscription réussie !</h2>
+            <p style="font-size: 16px; font-weight: bold; line-height: 1.4; margin-bottom: 10px; color: #ffffff;">
+                🎉 Félicitations ! Votre profil est maintenant visible sur Artisans228.
             </p>
-            <p style="font-size: 15px; line-height: 1.5; opacity: 0.95; margin-bottom: 20px;">
-                Partagez cette communauté pour plus d'audience.
+            <p style="font-size: 14px; line-height: 1.4; margin-bottom: 10px; opacity: 0.95;">
+                Les clients peuvent désormais découvrir votre activité et vous contacter directement par WhatsApp ou téléphone.
             </p>
-            <a href="https://api.whatsapp.com/send?text=Découvrez%20Artisans228,%20la%20vitrine%20numérique%20pour%20trouver%20des%20artisans%20de%20confiance%20au%20Togo%20ou%20inscrire%20votre%20activité%20gratuitement%20:%20https://artisans228.com" target="_blank" class="success-share-btn">
-                💬 Partager sur WhatsApp
-            </a>
+            
+            <div class="success-buttons-box">
+                <a href="https://api.whatsapp.com/send?text=Découvrez%20Artisans228,%20la%20vitrine%20numérique%20pour%20trouver%20des%20artisans%20de%20confiance%20au%20Togo%20ou%20inscrire%20votre%20activité%20gratuitement%20:%20https://artisans228.com" target="_blank" class="success-action-btn">
+                    💬 Partager sur WhatsApp
+                </a>
+                <a href="https://wa.me/15013131590?text=Bonjour,%20je%20viens%20de%20m'inscrire%20sur%20Artisans228." target="_blank" class="success-action-btn secondary">
+                    📞 Contactez l'équipe d'Artisans228
+                </a>
+                <a href="javascript:void(0);" onclick="returnToHome()" class="success-action-btn nav-btn">
+                    🏠 Retour à l'accueil
+                </a>
+            </div>
         </div>
     </div>
 
     <div class="container">
-        <!-- Green Intro Hero Banner -->
-        <div class="hero-banner">
-            <h1>🇹🇬 Artisans228</h1>
-            <p>Trouvez des artisans de confiance au Togo instantanément</p>
+        <!-- Clean White Intro Header -->
+        <div class="intro-top-section">
+            <h1>Trouvez facilement<br>un professionnel au Togo</h1>
+            <p>Plombier, électricien, maçon, coiffeur, mécanicien et bien plus encore...</p>
         </div>
 
-        <!-- Glowing/Pulsing Quick Signup Button for Artisans -->
-        <a href="#signup-form" class="top-signup-btn">✨ Vous êtes artisan ? Cliquez ici pour vous inscrire gratuitement</a>
+        <!-- STICKY YELLOW BUTTON -->
+        <a href="#signup-form" class="sticky-yellow-btn">
+            <div class="btn-text-group">
+                <span class="btn-main-title">🧑🏾‍🔧 VOUS ÊTES ARTISAN ?</span>
+                <span class="btn-sub-title">Inscrivez-vous gratuitement et trouvez de nouveaux clients.</span>
+                <span class="btn-desc-text">Votre profil sera visible par les personnes qui recherchent vos services au Togo.</span>
+            </div>
+            <div class="btn-arrow-circle">›</div>
+        </a>
 
-        <hr class="red-line">
+        <!-- Bouton Vert plus compact -->
+        <a href="#artisans-feed-anchor" class="action-main-btn btn-client-white">
+            <div class="btn-left-content">
+                <div class="btn-search-icon-circle">🔍</div>
+                <div class="btn-text-group">
+                    <span class="btn-main-title">Je cherche Artisan</span>
+                    <span class="btn-sub-title">Accès libre et sans inscription</span>
+                </div>
+            </div>
+            <div class="btn-arrow-circle">›</div>
+        </a>
 
-        <div class="feed-title">Artisans Disponibles</div>
+        <!-- Live Counter Pill Badge -->
+        <div class="community-pill" style="margin-top: 15px;">
+            <div class="community-text">
+                ✨ <strong id="artisan-count-text">Chargement...</strong> et toujours plus de professionnels chaque jour !
+            </div>
+        </div>
 
-        <!-- Category Filters with Icons -->
+        <hr class="red-line" id="artisans-feed-anchor">
+
+        <div class="feed-header-row">
+            <h2 class="feed-title">Artisans Disponibles</h2>
+            <a onclick="filterArtisans('Tous', document.querySelector('.cat-item'))" class="view-all-link">Voir tous ></a>
+        </div>
+
+        <!-- Rounded Square Categories Scroll Bar -->
         <div class="categories-scroll">
-            <button class="cat-btn active" onclick="filterArtisans('Tous', this)">🌟 Tous</button>
-            <button class="cat-btn" onclick="filterArtisans('Peinture', this)">🎨 Peinture</button>
-            <button class="cat-btn" onclick="filterArtisans('Carrelage', this)">🧱 Carrelage</button>
-            <button class="cat-btn" onclick="filterArtisans('Menuiserie', this)">🪑 Menuiserie</button>
-            <button class="cat-btn" onclick="filterArtisans('Nettoyage', this)">✨ Nettoyage</button>
-            <button class="cat-btn" onclick="filterArtisans('Plomberie', this)">🔧 Plomberie</button>
-            <button class="cat-btn" onclick="filterArtisans('Électricité', this)">⚡ Électricité</button>
-            <button class="cat-btn" onclick="filterArtisans('Maçonnerie', this)">🏗️ Maçonnerie</button>
-            <button class="cat-btn" onclick="filterArtisans('Soudure', this)">🔥 Soudure</button>
-            <button class="cat-btn" onclick="filterArtisans('Mécanique', this)">🚗 Mécanique</button>
-            <button class="cat-btn" onclick="filterArtisans('Climatisation', this)">❄️ Climatisation</button>
-            <button class="cat-btn" onclick="filterArtisans('Autre', this)">🛠️ Autre</button>
+            <div class="cat-item active" onclick="filterArtisans('Tous', this)">
+                <div class="cat-box">🌟</div>
+                <div class="cat-label">Tous</div>
+            </div>
+            <div class="cat-item" onclick="filterArtisans('Bâtiment', this)">
+                <div class="cat-box">🏗️</div>
+                <div class="cat-label">Bâtiment</div>
+            </div>
+            <div class="cat-item" onclick="filterArtisans('Décoration', this)">
+                <div class="cat-box">🛋️</div>
+                <div class="cat-label">Décoration</div>
+            </div>
+            <div class="cat-item" onclick="filterArtisans('Entretien', this)">
+                <div class="cat-box">❄️</div>
+                <div class="cat-label">Entretien</div>
+            </div>
+            <div class="cat-item" onclick="filterArtisans('Véhicules', this)">
+                <div class="cat-box">🚗</div>
+                <div class="cat-label">Véhicules</div>
+            </div>
+            <div class="cat-item" onclick="filterArtisans('Bien-être', this)">
+                <div class="cat-box">🧵</div>
+                <div class="cat-label">Bien-être</div>
+            </div>
+            <div class="cat-item" onclick="filterArtisans('Alimentation', this)">
+                <div class="cat-box">🍳</div>
+                <div class="cat-label">Alimentation</div>
+            </div>
+            <div class="cat-item" onclick="filterArtisans('Santé & Soins', this)">
+                <div class="cat-box">🩺</div>
+                <div class="cat-label">Santé & Soins</div>
+            </div>
+            <div class="cat-item" onclick="filterArtisans('Autre', this)">
+                <div class="cat-box">📌</div>
+                <div class="cat-label">Autre</div>
+            </div>
         </div>
 
         <!-- Smart Universal Search Bar -->
         <div class="search-container">
             <span class="search-icon">🔍</span>
-            <input type="text" id="search-input" class="search-input" placeholder="Rechercher (ex: pl, agoè, jean)..." onkeyup="filterAndSearch()">
+            <input type="text" id="search-input" class="search-input" placeholder="Rechercher un artisan, un service..." onkeyup="filterAndSearch()">
         </div>
 
         <!-- Artisans Feed Container -->
@@ -478,17 +903,34 @@
             <p style="text-align:center; color:#666; font-size:13px; padding: 20px; width: 100%;">Chargement des artisans...</p>
         </div>
 
-        <!-- Registration Form (Green Border Box) -->
-        <div class="form-box" id="signup-form">
-            <div class="section-title">Artisans : boostez votre visibilité en un clic. Rejoignez-nous !</div>
+        <!-- Load More Button -->
+        <div id="load-more-container" style="display: none; text-align: center; margin-bottom: 25px;">
+            <button id="load-more-btn" onclick="loadMoreArtisans()" style="padding: 10px 24px; background: #fff; color: #006633; border: 2px solid #006633; border-radius: 30px; cursor: pointer; font-weight: bold; font-size: 14px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); transition: all 0.2s;">
+                Afficher plus d'artisans 🔽
+            </button>
+        </div>
 
-            <!-- AJAX Form Setup with explicit action="/" and form-name parameter -->
+        <!-- Registration Form -->
+        <div class="form-box" id="signup-form">
+            <div class="section-title">Faites connaître votre activité gratuitement.</div>
+            <div class="form-reassurance">Recevez des clients via WhatsApp • Gratuit • Visible immédiatement.</div>
+
+            <div class="benefits-box">
+                <div class="benefits-title">🎯 Pourquoi s'inscrire ?</div>
+                <div class="benefits-grid">
+                    <div class="benefit-item">✅ Votre activité sur Artisans228</div>
+                    <div class="benefit-item">✅ Des clients vous trouvent</div>
+                    <div class="benefit-item">✅ Contact direct WhatsApp</div>
+                    <div class="benefit-item">✅ 100 % GRATUIT</div>
+                </div>
+            </div>
+
             <form name="artisan-signup" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field" id="signup-form-element" onsubmit="submitForm(event)">
                 <input type="hidden" name="form-name" value="artisan-signup">
+                <input type="hidden" name="dateInscription" id="date-inscription-field">
 
-                <!-- Hidden Honeypot Field to Stop Spam Bots -->
                 <p style="display:none;">
-                    <label>Ne remplissez pas ceci : <input name="bot-field" /></label>
+                    <label>Ne remplissez pas ceci : <input name="bot-field"></label>
                 </p>
 
                 <div class="form-group">
@@ -499,17 +941,87 @@
                     <label>Votre Spécialité *</label>
                     <select name="specialite" required>
                         <option value="">Sélectionnez votre spécialité</option>
-                        <option value="Peinture">Peinture</option>
-                        <option value="Carrelage">Carrelage</option>
-                        <option value="Menuiserie">Menuiserie</option>
-                        <option value="Nettoyage">Technicien de nettoyage</option>
-                        <option value="Plomberie">Plomberie</option>
-                        <option value="Électricité">Électricité</option>
-                        <option value="Maçonnerie">Maçonnerie</option>
-                        <option value="Soudure">Soudure</option>
-                        <option value="Mécanique">Mécanique</option>
-                        <option value="Climatisation">Climatisation</option>
-                        <option value="Autre">Autre</option>
+                        <optgroup label="🩺 Santé & Soins à domicile">
+                            <option value="Infirmier / Soins à domicile">Infirmier / Soins à domicile</option>
+                        </optgroup>
+                        <optgroup label="🏗️ Bâtiment & Gros Œuvre">
+                            <option value="Maçonnerie">Maçonnerie</option>
+                            <option value="Carrelage">Carrelage</option>
+                            <option value="Plomberie">Plomberie</option>
+                            <option value="Électricité">Électricité</option>
+                            <option value="Soudure">Soudure</option>
+                            <option value="Charpentier">Charpentier</option>
+                            <option value="Aluminium & Vitrier">Aluminium & Vitrier</option>
+                            <option value="Plaquiste / Plafonneur">Plaquiste / Plafonneur</option>
+                            <option value="Étancheur">Étancheur</option>
+                            <option value="Forage / Hydraulicien">Forage / Hydraulicien</option>
+                            <option value="Plafond décoratif & POP">Plafond décoratif & POP</option>
+                            <option value="Toiture & Charpente">Toiture & Charpente</option>
+                        </optgroup>
+                        <optgroup label="🛋️ Décoration, Aménagement & Finition">
+                            <option value="Peinture">Peinture</option>
+                            <option value="Menuiserie">Menuiserie</option>
+                            <option value="Tapissier">Tapissier</option>
+                            <option value="Fleuriste">Fleuriste</option>
+                            <option value="Tapisserie d'ameublement">Tapisserie d'ameublement</option>
+                        </optgroup>
+                        <optgroup label="❄️ Entretien, Nettoyage, Énergie & Tech">
+                            <option value="Technicien de nettoyage">Technicien de nettoyage</option>
+                            <option value="Climatisation">Climatisation</option>
+                            <option value="Frigoriste">Frigoriste / Technicien de Froid</option>
+                            <option value="Panneaux Solaires">Installateur de Panneaux Solaires</option>
+                            <option value="Caméras de Surveillance">Technicien en Sécurité / Caméras</option>
+                            <option value="Informaticien">Informaticien / Réparateur PC</option>
+                            <option value="Électricien Réseau">Électricien Bâtiment & Réseau</option>
+                            <option value="Installation Solaire & Onduleur">Installation Solaire & Onduleur</option>
+                            <option value="Installation Antenne & Parabole">Installation Antenne & Parabole (DSTV)</option>
+                            <option value="Réparation de groupes électrogènes">Réparation de groupes électrogènes</option>
+                            <option value="Support informatique & Tech">Support informatique & Tech</option>
+                            <option value="Réparation de téléphones & Ordinateurs">Réparation de téléphones & Ordinateurs</option>
+                            <option value="Développement Web & Applications">Développement Web & Applications</option>
+                            <option value="Fumigation & Désinsectisation">Fumigation & Désinsectisation</option>
+                        </optgroup>
+                        <optgroup label="🚗 Véhicules, Transport & Logistique">
+                            <option value="Mécanique">Mécanique</option>
+                            <option value="Chauffeur">Chauffeur</option>
+                            <option value="Électricien Automobile">Électricien Automobile</option>
+                            <option value="Tôlier Peintre Auto">Dépanneur / Tôlier Peintre Auto</option>
+                            <option value="Déménageur">Déménageur / Transporteur</option>
+                            <option value="Tôlerie & Peinture automobile">Tôlerie & Peinture automobile</option>
+                            <option value="Vulcanisateur & Services de pneus">Vulcanisateur & Services de pneus</option>
+                            <option value="Déménagement & Transport de marchandises">Déménagement & Transport de marchandises</option>
+                            <option value="Coursier & Logistique">Coursier & Logistique</option>
+                        </optgroup>
+                        <optgroup label="🧵 Mode, Beauté, Bien-Être & Événementiel">
+                            <option value="Esthéticienne">Esthéticienne</option>
+                            <option value="Photographe">Photographe</option>
+                            <option value="Couturier / Styliste">Couturier / Styliste</option>
+                            <option value="Coiffeur / Coiffeuse">Coiffeur / Coiffeuse</option>
+                            <option value="Maquilleur(se)">Maquilleur(se) professionnel(le)</option>
+                            <option value="DJ / Animateur">DJ / Animateur d'événements</option>
+                            <option value="Décorateur(trice)">Décorateur(trice) d'événements</option>
+                            <option value="Coiffure & Barbier">Coiffure & Barbier</option>
+                            <option value="Maquilleur / Maquilleuse">Maquilleur / Maquilleuse</option>
+                            <option value="Prothésiste ongulaire">Prothésiste ongulaire / Soin des ongles</option>
+                            <option value="Cordonnerie">Cordonnerie (Fabrication & Réparation de chaussures)</option>
+                            <option value="Design graphique">Design graphique</option>
+                            <option value="Imprimerie & Marquage publicitaire">Imprimerie & Marquage publicitaire</option>
+                            <option value="Maître de cérémonie (MC)">Maître de cérémonie (MC) & Animateur</option>
+                            <option value="Organisation d'événements & Location">Organisation d'événements & Location</option>
+                            <option value="Coach sportif / Fitness">Coach sportif / Fitness</option>
+                        </optgroup>
+                        <optgroup label="🍳 Alimentation & Services du Quotidien">
+                            <option value="Boulanger">Boulanger</option>
+                            <option value="Boucher">Boucher</option>
+                            <option value="Traiteur">Traiteur / Cuisinier(ère) à domicile</option>
+                            <option value="Jardinier">Jardinier / Paysagiste</option>
+                            <option value="Laveur de voitures">Laveur de voitures à domicile</option>
+                            <option value="Barman / Serveur de bar">Barman / Serveur de bar</option>
+                            <option value="Répétition & Cours à domicile">Répétition & Cours à domicile</option>
+                            <option value="Blanchisserie & Nettoyage à sec">Blanchisserie & Nettoyage à sec</option>
+                            <option value="Marketing numérique & Réseaux sociaux">Marketing numérique & Réseaux sociaux</option>
+                            <option value="Autre">Autre</option>
+                        </optgroup>
                     </select>
                 </div>
                 <div class="form-group">
@@ -537,17 +1049,17 @@
                         <span class="whatsapp-prefix">+228</span>
                         <input type="tel" id="whatsapp-local" class="whatsapp-input" required pattern="[0-9]{8}" maxlength="8" placeholder="90000000">
                     </div>
+                    <span class="field-helper">Votre numéro permet aux clients de vous contacter directement ou sur WhatsApp</span>
                     <input type="hidden" name="whatsapp" id="whatsapp-full">
                 </div>
-                <button type="submit" class="btn-submit" id="submit-btn">S'inscrire</button>
+                <button type="submit" class="btn-submit" id="submit-btn">Publier mon activité gratuitement</button>
             </form>
         </div>
 
-        <!-- Footer Contact Info with WhatsApp Text Button -->
         <footer>
-            <p>Pour toute question, contactez-nous à : <br><a href="mailto:artisans228@gmail.com">artisans228@gmail.com</a></p>
-            <p style="margin-top: 10px;">Ou envoyez-nous un message direct :</p>
-            <a href="https://wa.me/15013131590?text=Bonjour,%20je%20vous%20contacte%20depuis%20le%20site%20Artisans228." target="_blank" class="footer-whatsapp-btn">💬 Écrire sur WhatsApp</a>
+            <p class="footer-tagline">Trouvez des artisans de confiance près de chez vous : plombiers, électriciens, couturiers, menuisiers et bien plus encore, partout au Togo.</p>
+            <p><a href="https://www.artisans228.com">www.artisans228.com</a></p>
+            <p style="margin-top: 12px;"><a href="confidentialite.html" style="color: #006633; text-decoration: underline; font-weight: 500;">Politique de Confidentialité</a></p>
         </footer>
     </div>
 
@@ -555,10 +1067,9 @@
     <div id="artisan-modal" class="modal-overlay" onclick="closeModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <button class="modal-close" onclick="closeModal()">×</button>
-            <h3 id="modal-nom" style="margin: 0 0 5px 0; font-size: 18px; color: #006633;"></h3>
+            <h2 id="modal-nom" style="margin: 0 0 5px 0; font-size: 18px; color: #006633;">Profil Artisan</h2>
             <p id="modal-specialite" style="margin: 0 0 6px 0; font-size: 14px; font-weight: bold; color: #333;"></p>
             <p id="modal-location" style="margin: 0 0 6px 0; font-size: 13px; color: #666;"></p>
-            <p id="modal-date" style="margin: 0 0 12px 0; font-size: 12px; color: #888; font-style: italic;"></p>
             <p id="modal-bio" style="margin: 0 0 15px 0; font-size: 14px; color: #444; line-height: 1.5; white-space: pre-wrap; word-break: break-word;"></p>
             
             <div class="modal-buttons-container">
@@ -569,218 +1080,305 @@
     </div>
 
     <script>
-      // Automatic 3-Second Splash Screen Transition
-      window.addEventListener('load', () => {
-          setTimeout(() => {
-              const splash = document.getElementById('splash-screen');
-              if (splash) {
-                  splash.style.opacity = '0';
-                  setTimeout(() => { splash.style.display = 'none'; }, 600);
-              }
-          }, 3000);
-      });
+        // Enregistrement du Service Worker pour la PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('Service Worker enregistré:', reg.scope))
+                    .catch(err => console.log('Échec Service Worker:', err));
+            });
+        }
 
-      let allArtisans = [];
-      let activeCategory = 'Tous';
-
-      // Correct AJAX Form Submission Handler with explicit form-name
-      function submitForm(event) {
-          event.preventDefault();
-          
-          const localNum = document.getElementById('whatsapp-local').value.trim();
-          document.getElementById('whatsapp-full').value = '+228' + localNum;
-
-          const form = document.getElementById('signup-form-element');
-          const formData = new FormData(form);
-          const submitBtn = document.getElementById('submit-btn');
-
-          submitBtn.disabled = true;
-          submitBtn.innerText = "Envoi en cours...";
-
-          fetch("/", {
-              method: "POST",
-              headers: { "Content-Type": "application/x-www-form-urlencoded" },
-              body: new URLSearchParams(formData).toString()
-          })
-          .then(() => {
-              form.reset();
-              submitBtn.disabled = false;
-              submitBtn.innerText = "S'inscrire";
-
-              // Show the green success overlay
-              const overlay = document.getElementById('success-overlay');
-              overlay.style.display = 'flex';
-              setTimeout(() => { overlay.style.opacity = '1'; }, 10);
-
-              // Automatically hide it after 4 seconds and return to the site
-              setTimeout(() => {
-                  overlay.style.opacity = '0';
-                  setTimeout(() => {
-                      overlay.style.display = 'none';
-                  }, 500);
-              }, 4000);
-          })
-          .catch((error) => {
-              console.error("Form submission error:", error);
-              form.reset();
-              submitBtn.disabled = false;
-              submitBtn.innerText = "S'inscrire";
-              const overlay = document.getElementById('success-overlay');
-              overlay.style.display = 'flex';
-              setTimeout(() => { overlay.style.opacity = '1'; }, 10);
-              setTimeout(() => {
-                  overlay.style.opacity = '0';
-                  setTimeout(() => { overlay.style.display = 'none'; }, 500);
-              }, 4000);
-          });
-      }
-
-      async function loadArtisans() {
-        const container = document.getElementById('artisans-container');
-        const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRsoKV_q9iF04RTBJqe8Sx1LtU0zvKI1HQLl9o3At4jOlA4BSUGdqJC8LdregnrTPoo8G7UsqQ9sG7A/pub?gid=0&single=true&output=csv';
-
-        try {
-          const response = await fetch(csvUrl);
-          const text = await response.text();
-          
-          // Advanced CSV parser that correctly handles quoted fields with multi-line breaks
-          const rows = [];
-          let row = [];
-          let inQuotes = false;
-          let current = '';
-
-          for (let i = 0; i < text.length; i++) {
-              const char = text[i];
-              const nextChar = text[i + 1];
-
-              if (char === '"' && inQuotes && nextChar === '"') {
-                  current += '"';
-                  i++; // skip escaped quote
-              } else if (char === '"') {
-                  inQuotes = !inQuotes;
-              } else if (char === ',' && !inQuotes) {
-                  row.push(current.trim());
-                  current = '';
-              } else if ((char === '\r' && nextChar === '\n' || char === '\n') && !inQuotes) {
-                  row.push(current.trim());
-                  rows.push(row);
-                  row = [];
-                  if (char === '\r') i++; // skip \n in \r\n
-                  current = '';
-              } else {
-                  current += char;
-              }
-          }
-          if (current || row.length > 0) {
-              row.push(current.trim());
-              rows.push(row);
-          }
-
-          // Skip header row
-          const dataRows = rows.slice(1);
-          allArtisans = [];
-
-          dataRows.forEach(cols => {
-            if (cols.length >= 6 && cols[0]) {
-              const nom = cols[0].replace(/^"|"$/g, '').trim();
-              const specialite = cols[1] ? cols[1].replace(/^"|"$/g, '').trim() : 'Autre';
-              const region = cols[2] ? cols[2].replace(/^"|"$/g, '').trim() : '';
-              const quartier = cols[3] ? cols[3].replace(/^"|"$/g, '').trim() : '';
-              const bio = cols[4] ? cols[4].replace(/^"|"$/g, '').trim() : '';
-              const whatsapp = cols[5] ? cols[5].replace(/^"|"$/g, '').replace(/\s+/g, '').trim() : '';
-              const dateInscription = cols[6] ? cols[6].replace(/^"|"$/g, '').trim() : '';
-
-              if (nom) {
-                allArtisans.push({ nom, specialite, region, quartier, bio, whatsapp, dateInscription });
-              }
+        // Owner Contact / Menu Modal Functions
+        function openOwnerContact() {
+            document.getElementById('owner-contact-modal').style.display = 'flex';
+        }
+        function closeOwnerContact(event) {
+            if (!event || event.target.id === 'owner-contact-modal' || event.target.className.includes('modal-close')) {
+                document.getElementById('owner-contact-modal').style.display = 'none';
             }
-          });
-
-          filterAndSearch();
-        } catch (error) {
-          console.error('Error loading artisans:', error);
-          container.innerHTML = '<p style="text-align:center; color: red; font-size:13px; width:100%;">Erreur de chargement des artisans.</p>';
-        }
-      }
-
-      function displayArtisans(artisans) {
-        const container = document.getElementById('artisans-container');
-        container.innerHTML = '';
-
-        if (artisans.length === 0) {
-          container.innerHTML = '<p style="text-align:center; color:#666; font-size:13px; padding: 20px; width:100%;">Aucun artisan trouvé. Essayez un autre mot ou inscrivez-vous ci-dessous ! 👇</p>';
-          return;
         }
 
-        artisans.forEach(artisan => {
-          const card = document.createElement('div');
-          card.className = 'artisan-card';
-          card.innerHTML = `
-            <div>
-              <h3 style="margin: 0 0 3px 0; font-size: 15px; color: #006633;">${artisan.nom}</h3>
-              <p style="margin: 0 0 4px 0; font-size: 13px; font-weight: bold; color: #333;">${artisan.specialite}</p>
-              <p style="margin: 0 0 4px 0; font-size: 12px; color: #666;">📍 ${artisan.quartier}, ${artisan.region}</p>
-              <p class="bio-text">${artisan.bio}</p>
-            </div>
-            <span style="font-size: 12px; color: #006633; font-weight: bold; margin-top: 8px; display: block;">🔍 Voir le profil</span>
-          `;
-          
-          card.addEventListener('click', () => {
-            openModal(artisan);
-          });
-
-          container.appendChild(card);
-        });
-      }
-
-      function openModal(artisan) {
-        document.getElementById('modal-nom').innerText = artisan.nom;
-        document.getElementById('modal-specialite').innerText = artisan.specialite;
-        document.getElementById('modal-location').innerText = `📍 ${artisan.quartier}, ${artisan.region}`;
-        document.getElementById('modal-date').innerText = artisan.dateInscription ? `🗓️ Inscrit le : ${artisan.dateInscription}` : '';
-        document.getElementById('modal-bio').innerText = artisan.bio;
-        
-        const cleanWhatsapp = artisan.whatsapp.replace('+', '');
-        document.getElementById('modal-whatsapp').href = `https://wa.me/${cleanWhatsapp}`;
-        document.getElementById('modal-call').href = `tel:+${cleanWhatsapp}`;
-        
-        document.getElementById('artisan-modal').style.display = 'flex';
-      }
-
-      function closeModal() {
-        document.getElementById('artisan-modal').style.display = 'none';
-      }
-
-      function filterArtisans(category, btn) {
-        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        activeCategory = category;
-        filterAndSearch();
-      }
-
-      function filterAndSearch() {
-        const searchQuery = document.getElementById('search-input').value.toLowerCase().trim();
-
-        let filtered = allArtisans;
-
-        if (activeCategory !== 'Tous') {
-          filtered = filtered.filter(a => a.specialite.toLowerCase() === activeCategory.toLowerCase());
+        // FAQ Modal Functions
+        function openFaqModal() {
+            document.getElementById('owner-contact-modal').style.display = 'none';
+            document.getElementById('faq-modal').style.display = 'flex';
+        }
+        function closeFaqModal(event) {
+            if (!event || event.target.id === 'faq-modal' || event.target.className.includes('modal-close')) {
+                document.getElementById('faq-modal').style.display = 'none';
+            }
         }
 
-        if (searchQuery !== '') {
-          filtered = filtered.filter(a => {
-            return a.nom.toLowerCase().includes(searchQuery) ||
-                   a.specialite.toLowerCase().includes(searchQuery) ||
-                   a.quartier.toLowerCase().includes(searchQuery) ||
-                   a.region.toLowerCase().includes(searchQuery) ||
-                   a.bio.toLowerCase().includes(searchQuery);
-          });
+        let allArtisans = [];
+        let activeCategory = 'Tous';
+        let visibleItemsCount = 9;
+        const incrementCount = 9;
+        let currentFilteredArtisans = [];
+
+        const sectorMap = {
+            'Santé & Soins': ['Infirmier / Soins à domicile'],
+            'Bâtiment': ['Maçonnerie', 'Carrelage', 'Plomberie', 'Électricité', 'Soudure', 'Charpentier', 'Aluminium & Vitrier', 'Plaquiste / Plafonneur', 'Étancheur', 'Forage / Hydraulicien', 'Plafond décoratif & POP', 'Toiture & Charpente'],
+            'Décoration': ['Peinture', 'Menuiserie', 'Tapissier', 'Fleuriste', "Tapisserie d'ameublement"],
+            'Entretien': ['Technicien de nettoyage', 'Climatisation', 'Frigoriste', 'Panneaux Solaires', 'Caméras de Surveillance', 'Informaticien', 'Électricien Réseau', 'Installation Solaire & Onduleur', 'Installation Antenne & Parabole', 'Réparation de groupes électrogènes', 'Support informatique & Tech', 'Réparation de téléphones & Ordinateurs', 'Développement Web & Applications', 'Fumigation & Désinsectisation'],
+            'Véhicules': ['Mécanique', 'Chauffeur', 'Électricien Automobile', 'Tôlier Peintre Auto', 'Déménageur', 'Tôlerie & Peinture automobile', 'Vulcanisateur & Services de pneus', 'Déménagement & Transport de marchandises', 'Coursier & Logistique'],
+            'Bien-être': ['Esthéticienne', 'Photographe', 'Couturier / Styliste', 'Coiffeur / Coiffeuse', 'Maquilleur(se)', 'DJ / Animateur', 'Décorateur(trice)', 'Coiffure & Barbier', 'Maquilleur / Maquilleuse', 'Prothésiste ongulaire', 'Cordonnerie', 'Design graphique', 'Imprimerie & Marquage publicitaire', 'Maître de cérémonie (MC)', "Organisation d'événements & Location", 'Coach sportif / Fitness'],
+            'Alimentation': ['Boulanger', 'Boucher', 'Traiteur', 'Jardinier', 'Laveur de voitures', 'Barman / Serveur de bar', 'Répétition & Cours à domicile', 'Blanchisserie & Nettoyage à sec', 'Marketing numérique & Réseaux sociaux'],
+            'Autre': ['Autre']
+        };
+
+        function submitForm(event) {
+            event.preventDefault();
+            const today = new Date();
+            const formattedDate = String(today.getDate()).padStart(2, '0') + '/' + 
+                                  String(today.getMonth() + 1).padStart(2, '0') + '/' + 
+                                  today.getFullYear();
+            document.getElementById('date-inscription-field').value = formattedDate;
+            
+            const localNum = document.getElementById('whatsapp-local').value.trim();
+            document.getElementById('whatsapp-full').value = '+228' + localNum;
+
+            const form = document.getElementById('signup-form-element');
+            const formData = new FormData(form);
+            formData.set('dateInscription', formattedDate);
+
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Envoi en cours...";
+
+            fetch("/", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams(formData).toString()
+            })
+            .then(() => {
+                form.reset();
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Publier mon activité gratuitement";
+
+                const overlay = document.getElementById('success-overlay');
+                overlay.style.display = 'flex';
+                setTimeout(() => { overlay.style.opacity = '1'; }, 10);
+            })
+            .catch((error) => {
+                console.error("Form submission error:", error);
+                form.reset();
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Publier mon activité gratuitement";
+                const overlay = document.getElementById('success-overlay');
+                overlay.style.display = 'flex';
+                setTimeout(() => { overlay.style.opacity = '1'; }, 10);
+            });
         }
 
-        displayArtisans(filtered);
-      }
+        function returnToHome() {
+            const overlay = document.getElementById('success-overlay');
+            overlay.style.opacity = '0';
+            setTimeout(() => { overlay.style.display = 'none'; }, 500);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
-      loadArtisans();
+        async function loadArtisans() {
+            const container = document.getElementById('artisans-container');
+            const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRsoKV_q9iF04RTBJqe8Sx1LtU0zvKI1HQLl9o3At4jOlA4BSUGdqJC8LdregnrTPoo8G7UsqQ9sG7A/pub?gid=0&single=true&output=csv';
+
+            try {
+                const response = await fetch(csvUrl);
+                const text = await response.text();
+                
+                const rows = [];
+                let row = [];
+                let inQuotes = false;
+                let current = '';
+
+                for (let i = 0; i < text.length; i++) {
+                    const char = text[i];
+                    const nextChar = text[i + 1];
+
+                    if (char === '"' && inQuotes && nextChar === '"') {
+                        current += '"';
+                        i++;
+                    } else if (char === '"') {
+                        inQuotes = !inQuotes;
+                    } else if (char === ',' && !inQuotes) {
+                        row.push(current.trim());
+                        current = '';
+                    } else if ((char === '\r' && nextChar === '\n' || char === '\n') && !inQuotes) {
+                        row.push(current.trim());
+                        rows.push(row);
+                        row = [];
+                        if (char === '\r') i++;
+                        current = '';
+                    } else {
+                        current += char;
+                    }
+                }
+                if (current || row.length > 0) {
+                    row.push(current.trim());
+                    rows.push(row);
+                }
+
+                const headers = rows[0].map(h => h.toLowerCase().replace(/['"]/g, ""));
+                const dateIndex = headers.findIndex(h => h.includes('date') || h.includes('inscription'));
+
+                const dataRows = rows.slice(1);
+                allArtisans = [];
+
+                dataRows.forEach(cols => {
+                    if (cols.length >= 6 && cols[0]) {
+                        const nom = cols[0].replace(/^"|"$/g, '').trim();
+                        const specialite = cols[1] ? cols[1].replace(/^"|"$/g, '').trim() : 'Autre';
+                        const region = cols[2] ? cols[2].replace(/^"|"$/g, '').trim() : '';
+                        const quartier = cols[3] ? cols[3].replace(/^"|"$/g, '').trim() : '';
+                        const bio = cols[4] ? cols[4].replace(/^"|"$/g, '').trim() : '';
+                        const whatsapp = cols[5] ? cols[5].replace(/^"|"$/g, '').replace(/\s+/g, '').trim() : '';
+                        
+                        let dateInscription = '';
+                        if (dateIndex !== -1 && cols[dateIndex]) {
+                            dateInscription = cols[dateIndex].replace(/^"|"$/g, '').trim();
+                        } else if (cols[6]) {
+                            dateInscription = cols[6].replace(/^"|"$/g, '').trim();
+                        }
+
+                        if (!dateInscription && nom) {
+                            const today = new Date();
+                            dateInscription = String(today.getDate()).padStart(2, '0') + '/' + 
+                                              String(today.getMonth() + 1).padStart(2, '0') + '/' + 
+                                              today.getFullYear();
+                        }
+
+                        if (nom) {
+                            allArtisans.push({ nom, specialite, region, quartier, bio, whatsapp, dateInscription });
+                        }
+                    }
+                });
+
+                const countTextEl = document.getElementById('artisan-count-text');
+                if (countTextEl) {
+                    countTextEl.innerText = `${allArtisans.length} artisans déjà inscrits`;
+                }
+
+                filterAndSearch();
+            } catch (error) {
+                console.error('Error loading artisans:', error);
+                container.innerHTML = '<p style="text-align:center; color: red; font-size:13px; width:100%;">Erreur de chargement des artisans.</p>';
+                const countTextEl = document.getElementById('artisan-count-text');
+                if (countTextEl) {
+                    countTextEl.innerText = "Communauté en ligne";
+                }
+            }
+        }
+
+        function displayArtisans(artisans) {
+            currentFilteredArtisans = artisans;
+            const container = document.getElementById('artisans-container');
+            container.innerHTML = '';
+
+            if (artisans.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:#666; font-size:13px; padding: 20px; width:100%;">Aucun artisan trouvé. Essayez un autre mot ou inscrivez-vous ci-dessous ! 👇</p>';
+                document.getElementById('load-more-container').style.display = 'none';
+                return;
+            }
+
+            const visibleItems = artisans.slice(0, visibleItemsCount);
+
+            visibleItems.forEach(artisan => {
+                const card = document.createElement('div');
+                card.className = 'artisan-card';
+
+                card.innerHTML = `
+                    <div>
+                      <h3 style="margin: 0 0 3px 0; font-size: 15px; color: #006633;">${artisan.nom}</h3>
+                      <p style="margin: 0 0 4px 0; font-size: 13px; font-weight: bold; color: #333;">${artisan.specialite}</p>
+                      <p style="margin: 0 0 4px 0; font-size: 12px; color: #666;">📍 ${artisan.quartier}, ${artisan.region}</p>
+                      <p class="bio-text">${artisan.bio}</p>
+                    </div>
+                    <span style="font-size: 12px; color: #006633; font-weight: bold; margin-top: 8px; display: block;">🔍 Voir le profil</span>
+                `;
+                
+                card.addEventListener('click', () => {
+                    openModal(artisan);
+                });
+
+                container.appendChild(card);
+            });
+
+            const loadMoreContainer = document.getElementById('load-more-container');
+            if (visibleItemsCount < artisans.length) {
+                loadMoreContainer.style.display = 'block';
+            } else {
+                loadMoreContainer.style.display = 'none';
+            }
+        }
+
+        function loadMoreArtisans() {
+            visibleItemsCount += incrementCount;
+            displayArtisans(currentFilteredArtisans);
+        }
+
+        function openModal(artisan) {
+            document.getElementById('modal-nom').innerText = artisan.nom;
+            document.getElementById('modal-specialite').innerText = artisan.specialite;
+            document.getElementById('modal-location').innerText = `📍 ${artisan.quartier}, ${artisan.region}`;
+            document.getElementById('modal-bio').innerText = artisan.bio;
+            
+            const cleanWhatsapp = artisan.whatsapp.replace('+', '');
+            document.getElementById('modal-whatsapp').href = `https://wa.me/${cleanWhatsapp}`;
+            document.getElementById('modal-call').href = `tel:+${cleanWhatsapp}`;
+            
+            document.getElementById('artisan-modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('artisan-modal').style.display = 'none';
+        }
+
+        function filterArtisans(category, el) {
+            document.querySelectorAll('.cat-item').forEach(b => b.classList.remove('active'));
+            if (el) {
+                el.classList.add('active');
+            } else {
+                document.querySelector('.cat-item').classList.add('active');
+            }
+            activeCategory = category;
+            visibleItemsCount = 9;
+            filterAndSearch();
+        }
+
+        function filterAndSearch() {
+            visibleItemsCount = 9;
+            const searchQuery = document.getElementById('search-input').value.toLowerCase().trim();
+
+            let filtered = allArtisans;
+
+            if (activeCategory !== 'Tous') {
+                const allowedSubcategories = sectorMap[activeCategory] || [];
+                filtered = filtered.filter(a => {
+                    const spec = a.specialite.toLowerCase();
+                    if (activeCategory === 'Autre') {
+                        const allKnownSpecs = Object.keys(sectorMap)
+                            .filter(k => k !== 'Autre')
+                            .flatMap(k => sectorMap[k].map(s => s.toLowerCase()));
+                        return spec.includes('autre') || !allKnownSpecs.includes(spec);
+                    }
+                    return allowedSubcategories.some(sub => sub.toLowerCase() === spec);
+                });
+            }
+
+            if (searchQuery !== '') {
+                filtered = filtered.filter(a => {
+                    return a.nom.toLowerCase().includes(searchQuery) ||
+                           a.specialite.toLowerCase().includes(searchQuery) ||
+                           a.quartier.toLowerCase().includes(searchQuery) ||
+                           a.region.toLowerCase().includes(searchQuery) ||
+                           a.bio.toLowerCase().includes(searchQuery);
+                });
+            }
+
+            displayArtisans(filtered);
+        }
+
+        loadArtisans();
     </script>
 </body>
 </html>
