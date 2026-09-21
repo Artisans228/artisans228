@@ -14,7 +14,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Artisans228">
     
-    <meta name="description" content="Trouvez rapidement des artisans qualifiés (plombiers, électriciens, peintres...) partout au Togo. Contactez-les directement par WhatsApp en un clic. C'est 100% gratuit !">
+    <meta name="description" content="Trouvez rapidement des artisans qualifiés (plombiers, électriciens, peintres...) partout au Togo. Contactez-les directement par WhatsApp en un clic.">
     <link rel="canonical" href="https://www.artisans228.com/">
     <style>
         body {
@@ -29,11 +29,11 @@
             max-width: 600px;
             margin: 0 auto;
             padding: 15px;
-            padding-top: 75px; /* Space for fixed header */
+            padding-top: 75px;
             transition: max-width 0.3s ease;
         }
 
-        /* Fixed Top Header - Centré et aligné avec le conteneur principal */
+        /* Fixed Top Header */
         .fixed-header {
             position: fixed;
             top: 0;
@@ -57,7 +57,7 @@
             text-decoration: none;
         }
         .header-title-wrapper h2 {
-            font-size: 24px; /* Grande taille pour occuper l'espace à gauche */
+            font-size: 24px;
             color: #006633;
             margin: 0;
             font-weight: 900;
@@ -150,127 +150,170 @@
             margin: 0;
         }
 
-        /* Top Intro Header Text & Action Buttons */
-        .intro-top-section {
-            background-color: transparent;
-            padding: 5px 0 10px 0;
-            text-align: left;
+        /* Visual Hero Banner with Overlay Text */
+        .hero-banner-box {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background-color: #0b3b20;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.12);
         }
-        .intro-top-section h1 {
-            font-size: 26px;
-            line-height: 1.2;
-            margin: 0 0 8px 0;
-            color: #111;
-            font-weight: 800;
+        .hero-banner-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            object-position: left center;
+            display: block;
+            opacity: 0.55;
         }
-        .intro-top-section p {
-            font-size: 13px;
-            margin: 0 0 12px 0;
-            color: #555;
-            line-height: 1.4;
-        }
-
-        /* Action Buttons Container & Sticky Yellow */
-        .action-buttons-container {
+        .hero-banner-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             display: flex;
             flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 15px;
+            box-sizing: border-box;
+            background: rgba(0, 0, 0, 0.25);
+        }
+        .hero-banner-overlay h1 {
+            font-size: 22px;
+            font-weight: 900;
+            margin: 0 0 6px 0;
+            line-height: 1.25;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+        }
+        .hero-banner-overlay h1 span {
+            color: #ffcc00;
+        }
+        .hero-banner-overlay p {
+            font-size: 12px;
+            margin: 0;
+            opacity: 0.95;
+            max-width: 400px;
+            line-height: 1.4;
+            color: #ffffff;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+        }
+
+        /* Split Action Cards Grid - Compact Height */
+        .signup-grid-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 10px;
             margin-bottom: 12px;
         }
-        
-        /* Bouton Jaune Sticky */
-        .sticky-yellow-btn {
-            position: sticky;
-            top: 56px;
-            z-index: 98;
-            background-color: #ffcc00;
-            color: #111;
+        @media(max-width: 480px) {
+            .signup-grid-split {
+                grid-template-columns: 1fr;
+            }
+        }
+        .split-card {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 14px 18px;
-            border-radius: 14px;
+            padding: 10px 12px;
+            border-radius: 12px;
             text-decoration: none;
             box-sizing: border-box;
-            box-shadow: 0 4px 12px rgba(255, 204, 0, 0.3);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
             transition: transform 0.2s;
-            width: 100%;
-            margin-bottom: 10px;
         }
-        .sticky-yellow-btn:hover {
+        .split-card:hover {
             transform: scale(1.01);
-        }
-        .sticky-yellow-btn .btn-arrow-circle {
-            background: rgba(0, 0, 0, 0.1);
-        }
-
-        /* Bouton Vert plus compact */
-        .action-main-btn {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px 20px;
-            border-radius: 14px;
-            text-decoration: none;
-            box-sizing: border-box;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            transition: transform 0.2s;
-            width: 100%;
-        }
-        .action-main-btn:hover {
-            transform: scale(1.01);
-        }
-        .btn-client-white {
-            background-color: #0b3b20;
-            color: white;
-            padding: 10px 16px;
-        }
-        .btn-left-content {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .btn-search-icon-circle {
-            width: 32px;
-            height: 32px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 15px;
-            color: white;
         }
         .btn-text-group {
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            gap: 1px;
         }
         .btn-main-title {
-            font-size: 15px;
-            font-weight: bold;
+            font-size: 12px;
+            font-weight: 800;
         }
         .btn-sub-title {
-            font-size: 12px;
+            font-size: 10px;
             opacity: 0.85;
+            line-height: 1.2;
         }
-        .btn-desc-text {
-            font-size: 11px;
-            opacity: 0.9;
-            line-height: 1.3;
-            margin-top: 1px;
+        .btn-arrow-circle-small {
+            width: 24px;
+            height: 24px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            flex-shrink: 0;
+            margin-left: 8px;
         }
-        .btn-arrow-circle {
-            width: 32px;
-            height: 32px;
+        .btn-arrow-circle-white {
+            width: 24px;
+            height: 24px;
             background: rgba(255, 255, 255, 0.2);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: bold;
             flex-shrink: 0;
+            margin-left: 8px;
+        }
+
+        /* Integrated Search Box Block Style - Compact */
+        .search-hero-block {
+            background-color: #0b3b20;
+            color: white;
+            padding: 12px 14px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 12px rgba(11, 59, 32, 0.2);
+        }
+        .search-hero-header {
+            margin-bottom: 8px;
+        }
+        .search-hero-title {
+            font-size: 15px;
+            font-weight: bold;
+            margin: 0 0 1px 0;
+        }
+        .search-hero-subtitle {
+            font-size: 11px;
+            opacity: 0.85;
+            margin: 0;
+        }
+        .search-container-inline {
+            position: relative;
+        }
+        .search-input-inline {
+            width: 100%;
+            padding: 10px 12px;
+            padding-left: 36px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            box-sizing: border-box;
+            background: #fff;
+            color: #333;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .search-icon-inline {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            font-size: 14px;
         }
 
         /* Live Counter Pill Badge */
@@ -280,14 +323,14 @@
             justify-content: center;
             background: #ffffff;
             border: 1px solid #eaeaea;
-            padding: 12px 15px;
+            padding: 10px 15px;
             border-radius: 30px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.03);
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             text-align: center;
         }
         .community-text {
-            font-size: 13px;
+            font-size: 12px;
             color: #333;
             font-weight: 500;
         }
@@ -299,7 +342,7 @@
             height: 3px;
             background-color: #dc3545;
             border: none;
-            margin: 10px 0 20px 0;
+            margin: 5px 0 15px 0;
             border-radius: 2px;
         }
         .section-title {
@@ -360,10 +403,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
         .feed-title {
-            font-size: 17px;
+            font-size: 16px;
             font-weight: bold;
             color: #222;
             margin: 0;
@@ -376,18 +419,24 @@
             cursor: pointer;
         }
 
-        /* Rounded Square Categories Scroll Bar */
+        /* Improved Rounded Square Categories Scroll Bar */
         .categories-scroll {
             display: flex;
             gap: 10px;
             overflow-x: auto;
             padding-bottom: 10px;
-            margin-bottom: 15px;
-            scrollbar-width: none;
+            padding-right: 20px;
+            margin-bottom: 12px;
+            scrollbar-width: thin;
+            scrollbar-color: #006633 #f1f3f5;
             padding-left: 2px;
         }
         .categories-scroll::-webkit-scrollbar {
-            display: none;
+            height: 6px;
+        }
+        .categories-scroll::-webkit-scrollbar-thumb {
+            background-color: #006633;
+            border-radius: 10px;
         }
         .cat-item {
             display: flex;
@@ -398,15 +447,15 @@
             width: 72px;
         }
         .cat-box {
-            width: 64px;
-            height: 64px;
+            width: 60px;
+            height: 60px;
             background: #f1f3f5;
             border: 1px solid #e9ecef;
             border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 22px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.02);
             transition: all 0.2s ease;
         }
@@ -422,37 +471,13 @@
         .cat-label {
             font-size: 11px;
             color: #333;
-            margin-top: 6px;
+            margin-top: 5px;
             text-align: center;
             font-weight: 500;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             width: 100%;
-        }
-
-        /* Universal Search Bar */
-        .search-container {
-            position: relative;
-            margin-bottom: 15px;
-        }
-        .search-input {
-            width: 100%;
-            padding: 12px;
-            padding-left: 38px;
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            font-size: 14px;
-            box-sizing: border-box;
-            background: #fff;
-        }
-        .search-icon {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #888;
-            font-size: 15px;
         }
 
         /* Artisans Feed Area */
@@ -675,10 +700,6 @@
         .success-action-btn:hover {
             transform: scale(1.03);
         }
-        .success-action-btn.secondary {
-            background-color: #ffdd57;
-            color: #111;
-        }
         .success-action-btn.nav-btn {
             background-color: rgba(255, 255, 255, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.4);
@@ -730,14 +751,14 @@
             <button class="modal-close" onclick="closeOwnerContact()">×</button>
             <h3 style="margin-top: 0; color: #006633; font-size: 20px;">Menu & Assistance</h3>
             <p style="font-size: 14px; color: #555; margin-bottom: 20px;">
-                Besoin d'aide, de consulter la FAQ ou de contacter le propriétaire ? Choisissez une option ci-dessous :
+                Besoin d'aide, de consulter la FAQ ou de contacter l'équipe ? Choisissez une option ci-dessous :
             </p>
             <div style="display: flex; flex-direction: column; gap: 12px;">
                 <button onclick="openFaqModal()" class="modal-action-btn" style="background-color: #ffcc00; color: #111;">
                     ❓ Foire Aux Questions (FAQ)
                 </button>
                 <a href="https://wa.me/15013131590?text=Bonjour,%20je%20vous%20contacte%20depuis%20le%20site%20Artisans228." target="_blank" class="modal-action-btn btn-whatsapp">
-                    💬 Écrire sur WhatsApp
+                    💬 Contactez l'équipe
                 </a>
                 <a href="mailto:artisans228@gmail.com?subject=Contact%20depuis%20Artisans228" class="modal-action-btn" style="background-color: #006633; color: white;">
                     ✉️ Envoyer un Email
@@ -764,7 +785,7 @@
 
             <div class="faq-item">
                 <div class="faq-question">3. Comment trouver un artisan pour un travail ?</div>
-                <div class="faq-answer">Utilisez la barre de recherche ou les catégories, puis cliquez sur le profil d'un artisan pour découvrir ses compétences et le contacter directement par WhatsApp ou téléphone en un clic.</div>
+                <div class="faq-answer">Utilisez la barre de recherche intégrée ou les catégories, puis cliquez sur le profil d'un artisan pour découvrir ses compétences et le contacter directement par WhatsApp ou téléphone en un clic.</div>
             </div>
 
             <div class="faq-item">
@@ -777,9 +798,19 @@
                 <div class="faq-answer">Les clients voient votre profil directement sur le site et utilisent votre numéro WhatsApp ou votre numéro de téléphone pour vous joindre et discuter de leurs projets.</div>
             </div>
 
+            <div class="faq-item">
+                <div class="faq-question">6. Qui est le créateur d'Artisans228 et pourquoi cette initiative ?</div>
+                <div class="faq-answer">
+                    Artisans228 a été fondé par un Togolais convaincu que le savoir-faire local mérite d'être vu. Le constat est simple : beaucoup de clients trouvent un artisan par le bouche-à-oreille, tandis que des artisans talentueux restent invisibles en ligne. Artisans228 comble ce fossé.<br><br>
+                    Concrètement, les artisans créent un profil visible par les clients dans tout le Togo, et les clients les contactent directement via WhatsApp — sans intermédiaire.<br><br>
+                    - <strong>Notre mission :</strong> valoriser les talents togolais et rendre les services du quotidien accessibles à tous.<br>
+                    - <strong>Notre engagement :</strong> offrir un espace moderne et simple, pensé aussi bien pour les artisans que pour les clients.
+                </div>
+            </div>
+
             <div class="faq-item" style="border-bottom: none; margin-bottom: 0; padding-bottom: 0;">
-                <div class="faq-question">6. Comment contacter l'équipe en cas besoin ?</div>
-                <div class="faq-answer">Vous pouvez contacter directement le propriétaire à tout moment en cliquant sur le menu (☰) en haut de la page, puis sur l'option de contact WhatsApp ou e-mail.</div>
+                <div class="faq-question">7. Comment contacter l'équipe en cas de besoin ?</div>
+                <div class="faq-answer">Vous pouvez contacter directement l'équipe à tout moment en cliquant sur le menu (☰) en haut de la page.</div>
             </div>
         </div>
     </div>
@@ -799,9 +830,6 @@
                 <a href="https://api.whatsapp.com/send?text=Découvrez%20Artisans228,%20la%20vitrine%20numérique%20pour%20trouver%20des%20artisans%20de%20confiance%20au%20Togo%20ou%20inscrire%20votre%20activité%20gratuitement%20:%20https://artisans228.com" target="_blank" class="success-action-btn">
                     💬 Partager sur WhatsApp
                 </a>
-                <a href="https://wa.me/15013131590?text=Bonjour,%20je%20viens%20de%20m'inscrire%20sur%20Artisans228." target="_blank" class="success-action-btn secondary">
-                    📞 Contactez l'équipe d'Artisans228
-                </a>
                 <a href="javascript:void(0);" onclick="returnToHome()" class="success-action-btn nav-btn">
                     🏠 Retour à l'accueil
                 </a>
@@ -810,42 +838,56 @@
     </div>
 
     <div class="container">
-        <!-- Clean White Intro Header -->
-        <div class="intro-top-section">
-            <h1>Trouvez facilement<br>un professionnel au Togo</h1>
-            <p>Plombier, électricien, maçon, coiffeur, mécanicien et bien plus encore...</p>
+        <!-- Visual Banner Section -->
+        <div class="hero-banner-box">
+            <img src="banniere-artisans.jpg" alt="Artisans togolais" class="hero-banner-img">
+            <div class="hero-banner-overlay">
+                <h1>Votre prochain client<br><span>vous cherche déjà.</span></h1>
+                <p>Trouvez facilement un professionnel au Togo</p>
+            </div>
         </div>
 
-        <!-- STICKY YELLOW BUTTON -->
-        <a href="#signup-form" class="sticky-yellow-btn">
-            <div class="btn-text-group">
-                <span class="btn-main-title">🧑🏾‍🔧 VOUS ÊTES ARTISAN ?</span>
-                <span class="btn-sub-title">Inscrivez-vous gratuitement et trouvez de nouveaux clients.</span>
-                <span class="btn-desc-text">Votre profil sera visible par les personnes qui recherchent vos services au Togo.</span>
-            </div>
-            <div class="btn-arrow-circle">›</div>
-        </a>
-
-        <!-- Bouton Vert plus compact -->
-        <a href="#artisans-feed-anchor" class="action-main-btn btn-client-white">
-            <div class="btn-left-content">
-                <div class="btn-search-icon-circle">🔍</div>
+        <!-- SPLIT YELLOW / WHATSAPP ACTION CARDS (COMPACT) -->
+        <div class="signup-grid-split">
+            <!-- Left Card: Regular Web Signup (Yellow) -->
+            <a href="#signup-form" class="split-card" style="background-color: #ffcc00; color: #111;">
                 <div class="btn-text-group">
-                    <span class="btn-main-title">Je cherche Artisan</span>
-                    <span class="btn-sub-title">Accès libre et sans inscription</span>
+                    <span class="btn-main-title">🧑🏾‍🔧 VOUS ÊTES ARTISAN ?</span>
+                    <span class="btn-sub-title">Inscrivez-vous sur le site.</span>
                 </div>
+                <div class="btn-arrow-circle-small">›</div>
+            </a>
+
+            <!-- Right Card: Quick WhatsApp Signup (Official WhatsApp Green #25D366) -->
+            <a href="https://wa.me/15013131590?text=Bonjour,%20je%20suis%20artisan%20et%20je%20souhaite%20m'inscrire%20gratuitement%20sur%20Artisans228.%20Voici%20mes%20informations%20pour%20créer%20mon%20profil:%0A%0A-%20Nom%20et%20Prénom:%0A-%20Quartier:%0A-%20Région:%0A-%20Quelques%20mots%20sur%20mon%20activité%20ou%20spécialité:%0A%0AMerci!" target="_blank" class="split-card" style="background-color: #25D366; color: white;">
+                <div class="btn-text-group">
+                    <span class="btn-main-title">💬 INSCRIPTION WHATSAPP</span>
+                    <span class="btn-sub-title">en 30s, sans formulaire.</span>
+                </div>
+                <div class="btn-arrow-circle-white">›</div>
+            </a>
+        </div>
+
+        <!-- Integrated Search Block ("Je cherche un artisan") -->
+        <div class="search-hero-block" id="artisans-feed-anchor">
+            <div class="search-hero-header">
+                <p class="search-hero-title">Je cherche un artisan</p>
+                <p class="search-hero-subtitle">Accès libre et sans inscription</p>
             </div>
-            <div class="btn-arrow-circle">›</div>
-        </a>
+            <div class="search-container-inline">
+                <span class="search-icon-inline">🔍</span>
+                <input type="text" id="search-input" class="search-input-inline" placeholder="Rechercher un artisan, un service..." onkeyup="filterAndSearch()">
+            </div>
+        </div>
 
         <!-- Live Counter Pill Badge -->
-        <div class="community-pill" style="margin-top: 15px;">
+        <div class="community-pill">
             <div class="community-text">
                 ✨ <strong id="artisan-count-text">Chargement...</strong> et toujours plus de professionnels chaque jour !
             </div>
         </div>
 
-        <hr class="red-line" id="artisans-feed-anchor">
+        <hr class="red-line">
 
         <div class="feed-header-row">
             <h2 class="feed-title">Artisans Disponibles</h2>
@@ -883,19 +925,13 @@
                 <div class="cat-label">Alimentation</div>
             </div>
             <div class="cat-item" onclick="filterArtisans('Santé & Soins', this)">
-                <div class="cat-box">🩺</div>
+                <div class="cat-box">💉</div>
                 <div class="cat-label">Santé & Soins</div>
             </div>
             <div class="cat-item" onclick="filterArtisans('Autre', this)">
                 <div class="cat-box">📌</div>
                 <div class="cat-label">Autre</div>
             </div>
-        </div>
-
-        <!-- Smart Universal Search Bar -->
-        <div class="search-container">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="search-input" class="search-input" placeholder="Rechercher un artisan, un service..." onkeyup="filterAndSearch()">
         </div>
 
         <!-- Artisans Feed Container -->
@@ -941,9 +977,6 @@
                     <label>Votre Spécialité *</label>
                     <select name="specialite" required>
                         <option value="">Sélectionnez votre spécialité</option>
-                        <optgroup label="🩺 Santé & Soins à domicile">
-                            <option value="Infirmier / Soins à domicile">Infirmier / Soins à domicile</option>
-                        </optgroup>
                         <optgroup label="🏗️ Bâtiment & Gros Œuvre">
                             <option value="Maçonnerie">Maçonnerie</option>
                             <option value="Carrelage">Carrelage</option>
@@ -1010,7 +1043,7 @@
                             <option value="Organisation d'événements & Location">Organisation d'événements & Location</option>
                             <option value="Coach sportif / Fitness">Coach sportif / Fitness</option>
                         </optgroup>
-                        <optgroup label="🍳 Alimentation & Services du Quotidien">
+                        <optgroup label="🍳 Alimentation, Services du Quotidien & Santé">
                             <option value="Boulanger">Boulanger</option>
                             <option value="Boucher">Boucher</option>
                             <option value="Traiteur">Traiteur / Cuisinier(ère) à domicile</option>
@@ -1020,6 +1053,7 @@
                             <option value="Répétition & Cours à domicile">Répétition & Cours à domicile</option>
                             <option value="Blanchisserie & Nettoyage à sec">Blanchisserie & Nettoyage à sec</option>
                             <option value="Marketing numérique & Réseaux sociaux">Marketing numérique & Réseaux sociaux</option>
+                            <option value="Infirmier / Soins à domicile">Infirmier / Soins à domicile</option>
                             <option value="Autre">Autre</option>
                         </optgroup>
                     </select>
@@ -1058,7 +1092,7 @@
 
         <footer>
             <p class="footer-tagline">Trouvez des artisans de confiance près de chez vous : plombiers, électriciens, couturiers, menuisiers et bien plus encore, partout au Togo.</p>
-            <p><a href="https://www.artisans228.com">www.artisans228.com</a></p>
+            <p><a href="https://www.artisans228.com">www.artisans228.com</a> &nbsp;|&nbsp; <a href="https://wa.me/15013131590?text=Bonjour,%20je%20vous%20contacte%20depuis%20le%20site%20Artisans228." target="_blank" style="color: #25D366;">💬 Contactez l'équipe</a></p>
             <p style="margin-top: 12px;"><a href="confidentialite.html" style="color: #006633; text-decoration: underline; font-weight: 500;">Politique de Confidentialité</a></p>
         </footer>
     </div>
@@ -1080,7 +1114,6 @@
     </div>
 
     <script>
-        // Enregistrement du Service Worker pour la PWA
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/sw.js')
@@ -1089,7 +1122,6 @@
             });
         }
 
-        // Owner Contact / Menu Modal Functions
         function openOwnerContact() {
             document.getElementById('owner-contact-modal').style.display = 'flex';
         }
@@ -1099,7 +1131,6 @@
             }
         }
 
-        // FAQ Modal Functions
         function openFaqModal() {
             document.getElementById('owner-contact-modal').style.display = 'none';
             document.getElementById('faq-modal').style.display = 'flex';
@@ -1117,13 +1148,13 @@
         let currentFilteredArtisans = [];
 
         const sectorMap = {
-            'Santé & Soins': ['Infirmier / Soins à domicile'],
             'Bâtiment': ['Maçonnerie', 'Carrelage', 'Plomberie', 'Électricité', 'Soudure', 'Charpentier', 'Aluminium & Vitrier', 'Plaquiste / Plafonneur', 'Étancheur', 'Forage / Hydraulicien', 'Plafond décoratif & POP', 'Toiture & Charpente'],
             'Décoration': ['Peinture', 'Menuiserie', 'Tapissier', 'Fleuriste', "Tapisserie d'ameublement"],
             'Entretien': ['Technicien de nettoyage', 'Climatisation', 'Frigoriste', 'Panneaux Solaires', 'Caméras de Surveillance', 'Informaticien', 'Électricien Réseau', 'Installation Solaire & Onduleur', 'Installation Antenne & Parabole', 'Réparation de groupes électrogènes', 'Support informatique & Tech', 'Réparation de téléphones & Ordinateurs', 'Développement Web & Applications', 'Fumigation & Désinsectisation'],
             'Véhicules': ['Mécanique', 'Chauffeur', 'Électricien Automobile', 'Tôlier Peintre Auto', 'Déménageur', 'Tôlerie & Peinture automobile', 'Vulcanisateur & Services de pneus', 'Déménagement & Transport de marchandises', 'Coursier & Logistique'],
             'Bien-être': ['Esthéticienne', 'Photographe', 'Couturier / Styliste', 'Coiffeur / Coiffeuse', 'Maquilleur(se)', 'DJ / Animateur', 'Décorateur(trice)', 'Coiffure & Barbier', 'Maquilleur / Maquilleuse', 'Prothésiste ongulaire', 'Cordonnerie', 'Design graphique', 'Imprimerie & Marquage publicitaire', 'Maître de cérémonie (MC)', "Organisation d'événements & Location", 'Coach sportif / Fitness'],
             'Alimentation': ['Boulanger', 'Boucher', 'Traiteur', 'Jardinier', 'Laveur de voitures', 'Barman / Serveur de bar', 'Répétition & Cours à domicile', 'Blanchisserie & Nettoyage à sec', 'Marketing numérique & Réseaux sociaux'],
+            'Santé & Soins': ['Infirmier / Soins à domicile'],
             'Autre': ['Autre']
         };
 
