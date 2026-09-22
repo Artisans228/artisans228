@@ -1,0 +1,23 @@
+# Netlify headers for Artisans228
+# Place this file at the publish root, next to index.html.
+
+# HTML: always fresh (deploys go live immediately)
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+/
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Images: cache for 1 year (rename the file if you ever replace one)
+/*.jpg
+  Cache-Control: public, max-age=31536000
+/*.png
+  Cache-Control: public, max-age=31536000
+
+# Service worker: never cache, so updates apply immediately
+/sw.js
+  Cache-Control: no-cache
+
+# Basic security headers for everything
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin

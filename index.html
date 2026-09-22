@@ -12,18 +12,22 @@
       gtag('config', 'G-HXQ2NLWYW7');
     </script>
 
-    <!-- Meta Pixel Code -->
+    <!-- Meta Pixel Code (deferred: library loads after page render to protect performance) -->
     <script>
+    // Lightweight stub: queues fbq() calls until the real library loads on window load.
     !function(f,b,e,v,n,t,s)
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};
     if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1402287184613834');
-    fbq('track', 'PageView');
+    n.queue=[];}(window, document);
+    window.addEventListener('load', function() {
+      var t = document.createElement('script');
+      t.async = true;
+      t.src = 'https://connect.facebook.net/en_US/fbevents.js';
+      document.head.appendChild(t);
+      fbq('init', '1402287184613834');
+      fbq('track', 'PageView');
+    });
     </script>
     <!-- End Meta Pixel Code -->
 
@@ -40,7 +44,27 @@
     <meta name="apple-mobile-web-app-title" content="Artisans228">
     
     <meta name="description" content="Trouvez rapidement des artisans qualifiés (plombiers, électriciens, peintres...) partout au Togo. Contactez-les directement par WhatsApp en un clic.">
+    <!-- Open Graph / WhatsApp / Facebook link previews -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Artisans228">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:title" content="Artisans228 - Artisans de Confiance au Togo">
+    <meta property="og:description" content="Trouvez rapidement des artisans qualifiés (plombiers, électriciens, peintres...) partout au Togo. Contactez-les directement par WhatsApp en un clic.">
+    <meta property="og:url" content="https://artisans228.com/">
+    <meta property="og:image" content="https://artisans228.com/banniere-artisans.jpg">
+    <meta property="og:image:alt" content="Artisans togolais - Artisans228">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Artisans228 - Artisans de Confiance au Togo">
+    <meta name="twitter:description" content="Trouvez rapidement des artisans qualifiés partout au Togo. Contactez-les directement par WhatsApp en un clic.">
+    <meta name="twitter:image" content="https://artisans228.com/banniere-artisans.jpg">
     <link rel="canonical" href="https://www.artisans228.com/">
+
+    <!-- Performance: warm up connections to third-party hosts early -->
+    <link rel="preconnect" href="https://www.googletagmanager.com">
+    <link rel="preconnect" href="https://connect.facebook.net">
+    <link rel="preconnect" href="https://docs.google.com">
+    <!-- Performance: preload the LCP hero image so the browser discovers it immediately -->
+    <link rel="preload" as="image" href="banniere-artisans.jpg" fetchpriority="high">
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -701,6 +725,7 @@
             box-sizing: border-box;
             opacity: 0;
             transition: opacity 0.5s ease;
+            overflow-y: auto;
         }
         .success-buttons-box {
             display: flex;
@@ -731,6 +756,51 @@
         }
         .success-action-btn.nav-btn:hover {
             background-color: rgba(255, 255, 255, 0.3);
+        }
+        .success-profile-card {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 16px;
+            padding: 14px;
+            margin: 0 auto 6px auto;
+            text-align: center;
+            width: 100%;
+            max-width: 360px;
+            box-sizing: border-box;
+        }
+        .success-profile-card .card-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            opacity: 0.95;
+            color: #ffffff;
+        }
+        .profile-link-pill {
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-size: 13px;
+            text-align: center;
+            opacity: 0.9;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+        .copy-btn {
+            display: block;
+            width: 100%;
+            background-color: #ffdd57;
+            color: #111111;
+            border: none;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            font-family: inherit;
+            padding: 10px 14px;
+            cursor: pointer;
+            box-sizing: border-box;
         }
 
         footer {
@@ -845,18 +915,41 @@
 
     <!-- Full-Screen Green Success Screen -->
     <div id="success-overlay">
-        <div style="max-width: 450px; padding: 0 15px;">
+        <div id="success-content" style="max-width: 450px; width: 100%; padding: 0 15px; box-sizing: border-box;">
             <h2 style="font-size: 24px; color: #ffdd57; margin-top: 0; margin-bottom: 12px;">✅ Inscription réussie !</h2>
             <p style="font-size: 16px; font-weight: bold; line-height: 1.4; margin-bottom: 10px; color: #ffffff;">
                 🎉 Félicitations ! Votre profil est maintenant visible sur Artisans228.
             </p>
-            <p style="font-size: 14px; line-height: 1.4; margin-bottom: 10px; opacity: 0.95;">
+            <p style="font-size: 14px; line-height: 1.4; margin-bottom: 14px; opacity: 0.95;">
                 Les clients peuvent désormais découvrir votre activité et vous contacter directement par WhatsApp ou téléphone.
             </p>
-            
+
+            <div class="success-profile-card">
+                <div class="card-title">🔗 Le lien de votre profil</div>
+                <div class="profile-link-pill" id="profile-link-pill">artisans228.com#artisans-feed-anchor</div>
+                <button type="button" class="copy-btn" id="copy-profile-link" onclick="copyProfileLink()">Copier le lien</button>
+            </div>
+
             <div class="success-buttons-box">
-                <a href="https://api.whatsapp.com/send?text=Découvrez%20Artisans228,%20la%20vitrine%20numérique%20pour%20trouver%20des%20artisans%20de%20confiance%20au%20Togo%20ou%20inscrire%20votre%20activité%20gratuitement%20:%20https://artisans228.com" target="_blank" class="success-action-btn">
-                    💬 Partager sur WhatsApp
+                <a id="share-profile-btn" href="https://api.whatsapp.com/send?text=D%C3%A9couvrez%20Artisans228%20%3A%20https%3A%2F%2Fartisans228.com%23artisans-feed-anchor" target="_blank" class="success-action-btn">
+                    💬 Partager mon profil sur WhatsApp
+                </a>
+                <a href="javascript:void(0);" onclick="returnToHome()" class="success-action-btn nav-btn">
+                    🏠 Retour à l'accueil
+                </a>
+            </div>
+        </div>
+        <div id="error-content" style="display: none; max-width: 450px; width: 100%; padding: 0 15px; box-sizing: border-box;">
+            <h2 style="font-size: 24px; color: #ffdd57; margin-top: 0; margin-bottom: 12px;">⚠️ Oups !</h2>
+            <p style="font-size: 16px; font-weight: bold; line-height: 1.4; margin-bottom: 10px; color: #ffffff;">
+                Votre inscription n'a pas pu être envoyée.
+            </p>
+            <p style="font-size: 14px; line-height: 1.4; margin-bottom: 14px; opacity: 0.95;">
+                Vérifiez votre connexion internet, puis réessayez — vos informations sont conservées.
+            </p>
+            <div class="success-buttons-box">
+                <a href="javascript:void(0);" onclick="closeOverlay()" class="success-action-btn">
+                    🔄 Réessayer
                 </a>
                 <a href="javascript:void(0);" onclick="returnToHome()" class="success-action-btn nav-btn">
                     🏠 Retour à l'accueil
@@ -868,7 +961,7 @@
     <div class="container">
         <!-- Visual Banner Section -->
         <div class="hero-banner-box">
-            <img src="banniere-artisans.jpg" alt="Artisans togolais" class="hero-banner-img">
+            <img src="banniere-artisans.jpg" alt="Artisans togolais" class="hero-banner-img" fetchpriority="high" decoding="async">
             <div class="hero-banner-overlay">
                 <h1>Votre prochain client<br><span>vous cherche déjà.</span></h1>
                 <p>Trouvez facilement un professionnel au Togo</p>
@@ -1201,6 +1294,10 @@
             const formData = new FormData(form);
             formData.set('dateInscription', formattedDate);
 
+            // Captured for the personalized success screen (before the form is reset)
+            const artisanNom = (formData.get('nom') || '').toString().trim();
+            const artisanSpecialite = (formData.get('specialite') || '').toString().trim();
+
             const submitBtn = document.getElementById('submit-btn');
             submitBtn.disabled = true;
             submitBtn.innerText = "Envoi en cours...";
@@ -1215,26 +1312,95 @@
                 submitBtn.disabled = false;
                 submitBtn.innerText = "Publier mon activité gratuitement";
 
-                const overlay = document.getElementById('success-overlay');
-                overlay.style.display = 'flex';
-                setTimeout(() => { overlay.style.opacity = '1'; }, 10);
+                showSuccessOverlay(artisanNom, artisanSpecialite);
             })
             .catch((error) => {
                 console.error("Form submission error:", error);
-                form.reset();
                 submitBtn.disabled = false;
                 submitBtn.innerText = "Publier mon activité gratuitement";
-                const overlay = document.getElementById('success-overlay');
-                overlay.style.display = 'flex';
-                setTimeout(() => { overlay.style.opacity = '1'; }, 10);
+                // Keep the form values so the user can retry without retyping.
+                showErrorOverlay();
             });
         }
 
+        function showSuccessOverlay(nom, specialite) {
+            var s = document.getElementById('success-content');
+            var e = document.getElementById('error-content');
+            if (s) s.style.display = 'block';
+            if (e) e.style.display = 'none';
+
+            var profileUrl = 'https://artisans228.com#artisans-feed-anchor';
+
+            var pill = document.getElementById('profile-link-pill');
+            if (pill) { pill.textContent = profileUrl.replace('https://', ''); }
+
+            var who = nom ? (specialite ? nom + ' (' + specialite + ')' : nom) : 'un artisan';
+            var shareText = 'Découvrez ' + who + ' sur Artisans228, la vitrine numérique des artisans de confiance au Togo : ' + profileUrl;
+            var shareBtn = document.getElementById('share-profile-btn');
+            if (shareBtn) { shareBtn.href = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(shareText); }
+
+            var copyBtn = document.getElementById('copy-profile-link');
+            if (copyBtn) { copyBtn.innerText = 'Copier le lien'; copyBtn.setAttribute('data-url', profileUrl); }
+
+            const overlay = document.getElementById('success-overlay');
+            overlay.style.display = 'flex';
+            setTimeout(() => { overlay.style.opacity = '1'; }, 10);
+        }
+
+        function copyProfileLink() {
+            var btn = document.getElementById('copy-profile-link');
+            var url = (btn && btn.getAttribute('data-url')) || 'https://artisans228.com#artisans-feed-anchor';
+            function done() {
+                if (btn) {
+                    btn.innerText = '✅ Lien copié !';
+                    setTimeout(function() { btn.innerText = 'Copier le lien'; }, 2000);
+                }
+            }
+            function fallbackCopy(text) {
+                var ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.position = 'fixed';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.select();
+                try { document.execCommand('copy'); } catch (e) {}
+                document.body.removeChild(ta);
+            }
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(done).catch(function() { fallbackCopy(url); done(); });
+            } else {
+                fallbackCopy(url);
+                done();
+            }
+        }
+
         function returnToHome() {
+            closeOverlay();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showErrorOverlay() {
+            var s = document.getElementById('success-content');
+            var e = document.getElementById('error-content');
+            if (s) s.style.display = 'none';
+            if (e) e.style.display = 'block';
+
+            const overlay = document.getElementById('success-overlay');
+            overlay.style.display = 'flex';
+            setTimeout(() => { overlay.style.opacity = '1'; }, 10);
+        }
+
+        function closeOverlay() {
             const overlay = document.getElementById('success-overlay');
             overlay.style.opacity = '0';
-            setTimeout(() => { overlay.style.display = 'none'; }, 500);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                // Reset to the success view for next time
+                var s = document.getElementById('success-content');
+                var e = document.getElementById('error-content');
+                if (s) s.style.display = 'block';
+                if (e) e.style.display = 'none';
+            }, 500);
         }
 
         async function loadArtisans() {
